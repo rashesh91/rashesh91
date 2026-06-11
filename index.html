@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rashesh — AI Infrastructure Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #080c12;
+    --bg2:      #0d1117;
+    --bg3:      #111820;
+    --border:   #1e2d3d;
+    --border2:  #243447;
+    --cyan:     #00d4ff;
+    --cyan-dim: #00d4ff30;
+    --cyan-mid: #00d4ff60;
+    --amber:    #f0a500;
+    --green:    #3ddc84;
+    --text:     #c9d1d9;
+    --text-dim: #6e7f8f;
+    --text-muted: #3d5166;
+    --white:    #f0f6fc;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID BACKGROUND ─────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ─────────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 60px;
+    background: rgba(8,12,18,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-logo span { color: var(--text-dim); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* ── SECTIONS ────────────────────────────────────────── */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── HERO ────────────────────────────────────────────── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--cyan);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero-eyebrow::before {
+    content: '> ';
+    color: var(--text-muted);
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 7.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.4s;
+  }
+
+  .hero-name .accent {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--cyan);
+  }
+
+  .hero-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.9rem, 2vw, 1.15rem);
+    color: var(--text-dim);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.6s;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.8s;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--cyan);
+    color: #000;
+    font-weight: 700;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 24px var(--cyan-mid);
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    border: 1px solid var(--border2);
+    color: var(--text-dim);
+    background: transparent;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-1px);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 1.2s;
+  }
+
+  .hero-scroll span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--cyan), transparent);
+    animation: scrollPulse 1.8s ease-in-out infinite;
+  }
+
+  /* ── SECTION HEADER ──────────────────────────────────── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 3.5rem;
+    padding-top: 7rem;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border2), transparent);
+  }
+
+  /* ── PROJECT CARDS ───────────────────────────────────── */
+  .projects-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    opacity: 0;
+    transform: translateY(24px);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .project-card:hover {
+    border-color: var(--cyan-mid);
+    box-shadow: 0 0 40px var(--cyan-dim), 0 8px 32px rgba(0,0,0,0.4);
+    transform: translateY(-3px);
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .project-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  .project-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--cyan);
+    background: var(--cyan-dim);
+    border: 1px solid var(--cyan-mid);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .card-link:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-desc {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 680px;
+  }
+
+  /* ── PIPELINE ────────────────────────────────────────── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-bottom: 2rem;
+    padding: 1rem 1.2rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+
+  .pipeline-stage {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    white-space: nowrap;
+  }
+
+  .stage-box {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 0.35rem 0.75rem;
+    border-radius: 5px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .project-card:hover .stage-box {
+    border-color: var(--border2);
+  }
+
+  .stage-box.highlight {
+    border-color: var(--cyan-mid);
+    color: var(--cyan);
+    background: var(--cyan-dim);
+  }
+
+  .stage-arrow {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 0 0.3rem;
+    flex-shrink: 0;
+  }
+
+  /* ── FEATURES TABLE (P3) ─────────────────────────────── */
+  .features-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+  }
+
+  .features-table tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .features-table tr:last-child { border-bottom: none; }
+
+  .features-table td {
+    padding: 0.65rem 0.5rem;
+    vertical-align: top;
+  }
+
+  .features-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cyan);
+    white-space: nowrap;
+    padding-right: 1.2rem;
+    width: 200px;
+  }
+
+  .feat-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  .features-table td:last-child {
+    color: var(--text-dim);
+  }
+
+  /* ── BADGES ──────────────────────────────────────────── */
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+  }
+
+  .project-card:hover .badge {
+    border-color: var(--border2);
+    color: var(--text);
+  }
+
+  /* ── SKILLS ──────────────────────────────────────────── */
+  #skills { padding-bottom: 6rem; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-group {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .skill-group.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .skill-group-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--cyan);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .skill-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.65rem;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+
+  .skill-tag:hover {
+    border-color: var(--cyan-mid);
+    color: var(--cyan);
+    background: var(--cyan-dim);
+  }
+
+  /* ── CONNECT ─────────────────────────────────────────── */
+  #connect {
+    padding-bottom: 6rem;
+  }
+
+  .connect-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .connect-box.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .connect-box::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, var(--cyan-dim), transparent 70%);
+    pointer-events: none;
+  }
+
+  .connect-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .connect-text p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .connect-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────────── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .footer-left span { color: var(--cyan); }
+
+  .footer-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .footer-right a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-right a:hover { color: var(--cyan); }
+
+  /* ── ANIMATIONS ──────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50%       { opacity: 1;   transform: scaleY(1.1); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: var(--cyan);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 768px) {
+    nav { padding: 0 1.2rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links li:nth-child(3) { display: none; }
+
+    #hero { padding-left: 1.2rem; padding-right: 1.2rem; }
+    section { padding: 0 1.2rem; }
+
+    .section-header { padding-top: 5rem; }
+
+    .project-card { padding: 1.5rem; }
+
+    .card-top { flex-direction: column; align-items: flex-start; }
+
+    .pipeline { gap: 0.3rem; }
+
+    .features-table td:first-child { width: auto; font-size: 0.7rem; }
+
+    .connect-box { padding: 2rem; }
+
+    footer { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (max-width: 480px) {
+    .nav-links { display: none; }
+    .hero-name { font-size: 3rem; }
+    .pipeline { padding: 0.75rem; }
+    .stage-box { font-size: 0.65rem; padding: 0.25rem 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">rashesh<span>.dev</span></div>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#connect">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">AI Infrastructure Engineer</p>
+  <h1 class="hero-name">
+    Ras<span class="accent">hesh</span><span class="cursor"></span>
+  </h1>
+  <p class="hero-role">
+    Building production AI infrastructure — from model training pipelines<br>
+    to Kubernetes operators to SLO-backed serving systems.
+  </p>
+  <div class="hero-links">
+    <a href="https://github.com/rashesh91" target="_blank" class="btn btn-primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+      github.com/rashesh91
+    </a>
+    <a href="mailto:rashesh@lintel.in" class="btn btn-outline">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      rashesh@lintel.in
+    </a>
+  </div>
+  <div class="hero-scroll" style="position:fixed;display:none"></div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Projects</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- Project 1 -->
+    <div class="project-card" data-animate>
+      <div class="card-top">
+        <span class="project-num">01 / 03</span>
+        <a href="https://github.com/rashesh91/ml-inference-gitops" target="_blank" class="card-link">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          ml-inference-gitops
+        </a>
+      </div>
+      <h3 class="project-title">Voice Agentic AI Platform</h3>
+      <p class="project-desc">
+        Real-time voice assistant on Kubernetes. Browser microphone to audio response in under 4 seconds — Whisper transcribes speech, Mistral reasons and calls tools, Edge TTS speaks the answer back.
+      </p>
+      <div class="pipeline">
+        <div class="pipeline-stage">
+          <span class="stage-box highlight">Browser mic</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box">Whisper STT</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box highlight">Mistral 7B ReAct</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box">Edge TTS</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box highlight">Audio</span>
+        </div>
+      </div>
+      <div class="badges">
+        <span class="badge">Python</span>
+        <span class="badge">FastAPI</span>
+        <span class="badge">Kubernetes</span>
+        <span class="badge">ArgoCD</span>
+        <span class="badge">vLLM</span>
+        <span class="badge">Helm</span>
+        <span class="badge">GPU</span>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="project-card" data-animate>
+      <div class="card-top">
+        <span class="project-num">02 / 03</span>
+        <a href="https://github.com/rashesh91/ml-training-platform" target="_blank" class="card-link">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          ml-training-platform
+        </a>
+      </div>
+      <h3 class="project-title">LLM Fine-Tuning &amp; Evaluation Platform</h3>
+      <p class="project-desc">
+        Self-service training platform — upload a dataset, get a fine-tuned model auto-evaluated and registered in MLflow. A 5-step Argo Workflow DAG handles preprocessing, distributed training, evaluation, and promotion.
+      </p>
+      <div class="pipeline">
+        <div class="pipeline-stage">
+          <span class="stage-box highlight">Dataset</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box">MinIO</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box highlight">KubeRay LoRA</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box">MLflow Eval</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box">Staging</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-box highlight">Production</span>
+        </div>
+      </div>
+      <div class="badges">
+        <span class="badge">Python</span>
+        <span class="badge">KubeRay</span>
+        <span class="badge">HuggingFace PEFT</span>
+        <span class="badge">MLflow</span>
+        <span class="badge">Argo Workflows</span>
+        <span class="badge">MinIO</span>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="project-card" data-animate>
+      <div class="card-top">
+        <span class="project-num">03 / 03</span>
+        <a href="https://github.com/rashesh91/ai-platform-ops" target="_blank" class="card-link">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          ai-platform-ops
+        </a>
+      </div>
+      <h3 class="project-title">AI Platform Ops — Production Operations Layer</h3>
+      <p class="project-desc">
+        Closes all production gaps in Projects 1 and 2. Five components that separate a demo from a system that runs at 3 AM without anyone watching.
+      </p>
+      <table class="features-table">
+        <tr>
+          <td><span class="feat-dot"></span>Custom K8s Operator</td>
+          <td>MLflow → K8s auto-deploy in 30s via kopf <code style="font-family:JetBrains Mono;font-size:0.75em;color:var(--cyan)">@kopf.daemon</code></td>
+        </tr>
+        <tr>
+          <td><span class="feat-dot"></span>OTel + Tempo</td>
+          <td>STT / LLM / TTS waterfall traces — blame the right service in 30s</td>
+        </tr>
+        <tr>
+          <td><span class="feat-dot"></span>KEDA Scale-to-Zero</td>
+          <td>Ray workers idle 16h/day → ~60% GPU cost savings</td>
+        </tr>
+        <tr>
+          <td><span class="feat-dot"></span>Canary Rollouts</td>
+          <td>10% → 50% → 100% with Prometheus analysis gates, auto-abort</td>
+        </tr>
+        <tr>
+          <td><span class="feat-dot"></span>SLO Alerts</td>
+          <td>Google SRE burn rate formula — fast burn 14×/1h, slow burn 6×/6h</td>
+        </tr>
+      </table>
+      <div class="badges">
+        <span class="badge">kopf</span>
+        <span class="badge">OpenTelemetry</span>
+        <span class="badge">Grafana Tempo</span>
+        <span class="badge">KEDA</span>
+        <span class="badge">Argo Rollouts</span>
+        <span class="badge">Prometheus</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group" data-animate>
+      <div class="skill-group-title">Kubernetes &amp; GitOps</div>
+      <div class="skill-list">
+        <span class="skill-tag">Kubernetes</span>
+        <span class="skill-tag">ArgoCD</span>
+        <span class="skill-tag">Helm</span>
+        <span class="skill-tag">KEDA</span>
+        <span class="skill-tag">Argo Rollouts</span>
+        <span class="skill-tag">Argo Workflows</span>
+        <span class="skill-tag">Custom Operators</span>
+      </div>
+    </div>
+    <div class="skill-group" data-animate>
+      <div class="skill-group-title">Observability</div>
+      <div class="skill-list">
+        <span class="skill-tag">OpenTelemetry</span>
+        <span class="skill-tag">Grafana</span>
+        <span class="skill-tag">Prometheus</span>
+        <span class="skill-tag">Grafana Tempo</span>
+        <span class="skill-tag">SLO Engineering</span>
+      </div>
+    </div>
+    <div class="skill-group" data-animate>
+      <div class="skill-group-title">ML Infrastructure</div>
+      <div class="skill-list">
+        <span class="skill-tag">KubeRay</span>
+        <span class="skill-tag">vLLM</span>
+        <span class="skill-tag">HuggingFace PEFT</span>
+        <span class="skill-tag">MLflow</span>
+        <span class="skill-tag">MinIO</span>
+        <span class="skill-tag">GPU Workloads</span>
+      </div>
+    </div>
+    <div class="skill-group" data-animate>
+      <div class="skill-group-title">Languages &amp; Tools</div>
+      <div class="skill-list">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">FastAPI</span>
+        <span class="skill-tag">Bash</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">Git</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECT -->
+<section id="connect">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Connect</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="connect-box" data-animate>
+    <div class="connect-text">
+      <h3>Let's build something.</h3>
+      <p>// open to AI infrastructure roles</p>
+    </div>
+    <div class="connect-links">
+      <a href="https://github.com/rashesh91" target="_blank" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="mailto:rashesh@lintel.in" class="btn btn-outline">Email</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <span>rashesh91</span>.github.io &mdash; AI Infrastructure Portfolio
+  </div>
+  <div class="footer-right">
+    <a href="https://github.com/rashesh91" target="_blank">github.com/rashesh91</a>
+  </div>
+</footer>
+
+<script>
+  // Intersection observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, entry.target.dataset.delay || 0);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('[data-animate]').forEach((el, i) => {
+    el.dataset.delay = i * 80;
+    observer.observe(el);
+  });
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = link.getAttribute('href') === '#' + entry.target.id
+            ? 'var(--cyan)'
+            : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>
